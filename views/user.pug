@@ -1,0 +1,41 @@
+- var title = `${data.name} - Lander`
+- var description = data.description;
+- var image = data.photo ? data.photo : 'https://landr.me/images/social-icon.jpg';
+- var canonical = `https://landr.me/${username}`;
+
+doctype html
+html
+    head
+        meta(charset='utf-8')
+
+        title= title
+
+        meta(name='description', content=description)
+
+        meta(property='og:title', content=title)
+        meta(property='og:url', content=canonical)
+        meta(property='og:description', content=description)
+        meta(property='og:site_name', content='https://landr.me')
+        meta(property='og:image', content=image)
+
+        meta(property='twitter:card', content='summary_large_image')
+        meta(property='twitter:title', content=title)
+        meta(property='twitter:description', content=description)
+        meta(property='twitter:image', content=image)
+
+        meta(itemprop='image', content=image)
+
+        link(rel='canonical', href=canonical)
+
+        style(type='text/css')!= style
+    body
+        .wrapper
+            .content
+                .photo
+                    img.image(src=data.photo, alt=data.name)
+
+                h1.title=data.name
+                p.description=data.description
+
+                if data.bio
+                    p.bio=data.bio
