@@ -10,19 +10,24 @@ const style = fs.readFileSync('./public/stylesheets/style.css', 'utf-8');
 
 router.get('/:user', async (req, res, next) => {
   const username = req.params.user;
+  let fileUrl = null;
 
-  const fileUrl = await blockstack.getUserAppFileUrl(constants.userFile, username, constants.baseUrl);
-
-  request({uri: fileUrl, json: true}).then(data => {
-    res.render('user', {constants, data, style, username});
-  }).catch((err) => {
-    if (err.statusCode === 404) {
-      res.status(404);
-    } else {
-      res.status(500);
-    }
+  try {
+    fileUrl = await blockstack.getUserAppFileUrl(constants.userFile, username, constants.baseUrl);
+  } catch (e) {
+    res.status(404);
     next();
-  });
+  }
+
+  if (fileUrl) {
+    request({uri: fileUrl, json: true}).then(data => {
+      res.render('user', {constants, data, style, username});
+    }).catch(() => {
+      res.status(404);
+      next();
+    });
+  }
+
 });
 
 module.exports = router;
